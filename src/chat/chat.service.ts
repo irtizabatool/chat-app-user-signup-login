@@ -5,6 +5,7 @@ import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
 import { Chat } from './chat.entity';
 import { CreateChatDto } from './dto/create-chat.dto';
+import { FilterChatDto } from './dto/filter-chat.dto';
 
 @Injectable()
 export class ChatService {
@@ -13,15 +14,26 @@ export class ChatService {
     private userService: UserService,
   ) {}
 
-  async createChat({ email }: User, createChatDto: CreateChatDto) {
-    const { senderId, receiverId, message } = createChatDto;
-    const user = await this.userService.findOne({ where: { email } });
+  async createChat(user: User, createChatDto: CreateChatDto) {
+    const { receiver, message } = createChatDto;
     const chat = this.chatRepository.create({
-      sender: senderId,
-      receiver: receiverId,
+      sender: user.id,
+      receiver,
       message,
     });
     const result = await this.chatRepository.save(chat);
+    return result;
+  }
+
+  async viewChat(user: User, filterChatDto: FilterChatDto) {
+    const { receiver } = filterChatDto;
+    const result = await this.chatRepository.find({
+      select: ['message'],
+      where: [
+        { sender: user.id, receiver },
+        { sender: receiver, receiver: user.id },
+      ],
+    });
     return result;
   }
 }

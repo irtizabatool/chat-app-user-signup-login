@@ -3,6 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { User } from 'src/user/user.entity';
 import { ChatService } from './chat.service';
 import { CreateChatDto } from './dto/create-chat.dto';
+import { FilterChatDto } from './dto/filter-chat.dto';
 
 @Controller('chat')
 export class ChatController {
@@ -10,8 +11,14 @@ export class ChatController {
   @Post()
   @UseGuards(AuthGuard())
   async create(@Body() createChatDto: CreateChatDto, @Req() req: any) {
-    console.log('hi');
     const user = <User>req.user;
     return await this.chatService.createChat(user, createChatDto);
+  }
+
+  @Post('getmsg')
+  @UseGuards(AuthGuard())
+  async view(@Body() filterChatDto: FilterChatDto, @Req() req: any) {
+    const user = <User>req.user;
+    return await this.chatService.viewChat(user, filterChatDto);
   }
 }

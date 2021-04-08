@@ -2,21 +2,19 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from '../user/user.entity';
 
 @Entity()
 export class Chat {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => User, (user) => user.sent)
-  sender: User;
+  @Column()
+  sender: string;
 
-  @ManyToOne(() => User, (user) => user.received)
-  receiver: User;
+  @Column()
+  receiver: string;
 
   @Column()
   message: string;
