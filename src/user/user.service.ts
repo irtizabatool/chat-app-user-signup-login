@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { User } from './user.entity';
-
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UserService {
   constructor(
@@ -46,8 +46,8 @@ export class UserService {
   }
 
   async registerUser(createUserDto: CreateUserDto): Promise<User> {
-    const { name, email, password, contact } = createUserDto;
-
+    let { name, email, password, contact } = createUserDto;
+    password = await bcrypt.hash(password, 10);
     // check if the user exists in the db
     const userInDb = await this.userRepository.findOne({
       where: { email },

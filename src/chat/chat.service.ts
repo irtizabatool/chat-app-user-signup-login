@@ -12,17 +12,25 @@ export class ChatService {
   constructor(
     @InjectRepository(Chat) private chatRepository: Repository<Chat>,
     private userService: UserService,
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
   async createChat(user: User, createChatDto: CreateChatDto) {
     const { receiver, message } = createChatDto;
-    const chat = this.chatRepository.create({
-      sender: user.id,
-      receiver,
-      message,
-    });
-    const result = await this.chatRepository.save(chat);
-    return result;
+    try {
+      const userFound = await this.userRepository.findOneOrFail({
+        where: [{ id: receiver }],
+      });
+      const chat = this.chatRepository.create({
+        sender: user.id,
+        receiver,
+        message,
+      });
+      const result = await this.chatRepository.save(chat);
+      return result;
+    } catch (err) {
+      return 'No such user found';
+    }
   }
 
   async viewChat(user: User, filterChatDto: FilterChatDto) {

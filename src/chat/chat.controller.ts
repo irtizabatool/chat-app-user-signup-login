@@ -19,6 +19,11 @@ export class ChatController {
   @UseGuards(AuthGuard())
   async view(@Body() filterChatDto: FilterChatDto, @Req() req: any) {
     const user = <User>req.user;
-    return await this.chatService.viewChat(user, filterChatDto);
+    const result = await this.chatService.viewChat(user, filterChatDto);
+    if (!result.length) {
+      return 'No messages found';
+    } else {
+      return result;
+    }
   }
 }
