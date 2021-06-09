@@ -74,7 +74,10 @@ export class UserService {
       });
       return result;
     } catch (err) {
-      return 'Email or Password is incorrect';
+      let result: User;
+      result.name = 'Email orr password is incorrect';
+      return result;
+      // return 'Email or Password is incorrect';
     }
   }
 
