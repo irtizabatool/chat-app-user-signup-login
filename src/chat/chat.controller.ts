@@ -10,14 +10,20 @@ export class ChatController {
   constructor(private chatService: ChatService) {}
   @Post()
   @UseGuards(AuthGuard())
-  async create(@Body() createChatDto: CreateChatDto, @Req() req: any) {
+  async createChat(
+    @Body() createChatDto: CreateChatDto,
+    @Req() req: any,
+  ): Promise<any> {
     const user = <User>req.user;
     return await this.chatService.createChat(user, createChatDto);
   }
 
   @Post('getmsg')
   @UseGuards(AuthGuard())
-  async view(@Body() filterChatDto: FilterChatDto, @Req() req: any) {
+  async viewChat(
+    @Body() filterChatDto: FilterChatDto,
+    @Req() req: any,
+  ): Promise<any> {
     const user = <User>req.user;
     const result = await this.chatService.viewChat(user, filterChatDto);
     if (!result.length) {
