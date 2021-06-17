@@ -5,8 +5,8 @@ import {
   HttpStatus,
   Post,
 } from '@nestjs/common';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
-import { LoginUserDto } from 'src/user/dto/login-user.dto';
+import { CreateUserDto } from '../user/dto/create-user.dto';
+import { LoginUserDto } from '../user/dto/login-user.dto';
 import { AuthService } from './auth.service';
 import { LoginStatus } from './interfaces/login-status.interface';
 import { RegistrationStatus } from './interfaces/registration-status.interface';
